@@ -2,7 +2,7 @@ import React, { useRef, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Clipboard from '@react-native-clipboard/clipboard';
+import { TriangleAlert } from 'lucide-react-native';
 import { colors, typography, spacing, primaryGlow } from '../../constants/theme';
 import { useLocalId } from '../../contexts/LocalIdContext';
 
@@ -12,7 +12,7 @@ export default function WelcomeScreen() {
   const { localId } = useLocalId();
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
-  const handleCopySaveId = useCallback(() => {
+  const handleContinue = useCallback(() => {
     Animated.sequence([
       Animated.timing(scaleAnim, {
         toValue: 0.96,
@@ -25,31 +25,30 @@ export default function WelcomeScreen() {
         useNativeDriver: true,
       }),
     ]).start();
-    Clipboard.setString(localId);
-    navigation.reset({ index: 0, routes: [{ name: 'Main' }] });
-  }, [navigation, scaleAnim, localId]);
+    navigation.navigate('OnboardingPseudo' as never);
+  }, [navigation, scaleAnim]);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.content}>
-        <Text style={styles.title}>Your local account</Text>
+        <Text style={styles.title}>Votre identité locale</Text>
+        <View style={styles.warningRow}>
+          <TriangleAlert size={18} color={colors.alert} strokeWidth={2} />
+          <Text style={styles.warningText}>Valable uniquement sur ce téléphone</Text>
+        </View>
+        <Text style={styles.explanation}>
+          Un identifiant a été généré. Il sert à vous identifier de manière unique auprès de vos destinataires.
+        </Text>
         <View style={styles.idBlock}>
-          <Text style={styles.idLabel}>Unique ID</Text>
+          <Text style={styles.idLabel}>Identifiant</Text>
           <Text style={styles.idValue} selectable>
             {localId}
           </Text>
         </View>
-        <Text style={styles.explanation}>
-          Your messages remain fully local. Share this ID to connect with others.
-        </Text>
-        <TouchableOpacity onPress={handleCopySaveId} activeOpacity={1}>
+        <TouchableOpacity onPress={handleContinue} activeOpacity={1}>
           <Animated.View
-            style={[
-              styles.primaryButton,
-              primaryGlow,
-              { transform: [{ scale: scaleAnim }] },
-            ]}>
-            <Text style={styles.primaryButtonText}>Copy / Save ID</Text>
+            style={[styles.primaryButton, primaryGlow, { transform: [{ scale: scaleAnim }] }]}>
+            <Text style={styles.primaryButtonText}>Continuer</Text>
           </Animated.View>
         </TouchableOpacity>
       </View>
@@ -73,6 +72,18 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: colors.text,
     marginBottom: spacing.section,
+  },
+  warningRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    alignSelf: 'stretch',
+    marginBottom: spacing.padding,
+  },
+  warningText: {
+    ...typography.metaMedium,
+    color: colors.alert,
+    flex: 1,
   },
   idBlock: {
     backgroundColor: colors.surface,

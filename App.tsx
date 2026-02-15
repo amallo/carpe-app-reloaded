@@ -9,6 +9,7 @@ import { LocalIdProvider } from './contexts/LocalIdContext';
 import { PairingProvider } from './contexts/PairingContext';
 import { colors, fontFamily } from './constants/theme';
 import WelcomeScreen from './src/screens/WelcomeScreen';
+import OnboardingPseudoScreen from './src/screens/OnboardingPseudoScreen';
 import PublicChatScreen from './src/screens/PublicChatScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import PairingScreen from './src/screens/PairingScreen';
@@ -75,6 +76,7 @@ export default function App() {
                 contentStyle: { backgroundColor: colors.background },
               }}>
               <Stack.Screen name="Welcome" component={WelcomeScreen} />
+              <Stack.Screen name="OnboardingPseudo" component={OnboardingPseudoScreen} />
               <Stack.Screen name="Main" component={MainTabs} />
               <Stack.Screen name="Pairing" component={PairingScreen} />
             </Stack.Navigator>

@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Mic, Bluetooth } from 'lucide-react-native';
+import { Mic, Bluetooth, Send } from 'lucide-react-native';
 import { colors, typography, fontFamily, spacing, primaryGlow } from '../../constants/theme';
 import {
   publicChatMessages,
@@ -22,6 +22,7 @@ import {
   type Presence,
 } from '../../data/publicChatData';
 import { usePairing } from '../../contexts/PairingContext';
+import { useLocalId } from '../../contexts/LocalIdContext';
 
 const presenceLabel: Record<Presence, string> = {
   proche: 'Proche',
@@ -61,12 +62,40 @@ function MessageBubble({ msg }: { msg: PublicMessage }) {
   );
 }
 
+function formatTime(date: Date) {
+  return date.toLocaleTimeString('fr-FR', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 export default function PublicChatScreen() {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const { isPaired, pairedDeviceName } = usePairing();
+  const { pseudo } = useLocalId();
   const [input, setInput] = useState('');
+  const [messages, setMessages] = useState<PublicMessage[]>(() => [...publicChatMessages]);
+  const scrollRef = useRef<ScrollView>(null);
   const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  const handleSend = () => {
+    const text = input.trim();
+    if (!text) return;
+    const newMsg: PublicMessage = {
+      id: `m-${Date.now()}`,
+      senderId: 'user-1',
+      senderName: pseudo.trim() || 'You',
+      text,
+      timestamp: formatTime(new Date()),
+      isOwn: true,
+      status: 'sent',
+      presence: 'proche',
+    };
+    setMessages((prev) => [...prev, newMsg]);
+    setInput('');
+    setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
+  };
 
   const handlePTTPressIn = () => {
     Vibration.vibrate(50);
@@ -115,11 +144,12 @@ export default function PublicChatScreen() {
       </View>
 
       <ScrollView
+        ref={scrollRef}
         style={styles.list}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled">
-        {publicChatMessages.map((msg) => (
+        {messages.map((msg) => (
           <MessageBubble key={msg.id} msg={msg} />
         ))}
       </ScrollView>
@@ -133,7 +163,17 @@ export default function PublicChatScreen() {
           onChangeText={setInput}
           multiline
           maxLength={500}
+          returnKeyType="send"
+          onSubmitEditing={handleSend}
+          blurOnSubmit={false}
         />
+        <TouchableOpacity
+          onPress={handleSend}
+          style={[styles.sendButton, input.trim() ? styles.sendButtonActive : null]}
+          activeOpacity={0.8}
+          disabled={!input.trim()}>
+          <Send size={22} color={input.trim() ? colors.background : colors.textDim} strokeWidth={2} />
+        </TouchableOpacity>
         <Pressable onPressIn={handlePTTPressIn} onPressOut={handlePTTPressOut}>
           <Animated.View
             style={[
@@ -280,6 +320,17 @@ const styles = StyleSheet.create({
     color: colors.text,
     borderWidth: 1,
     borderColor: 'transparent',
+  },
+  sendButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sendButtonActive: {
+    backgroundColor: colors.primary,
   },
   pttButton: {
     width: 52,
