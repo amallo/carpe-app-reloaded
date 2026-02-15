@@ -1,45 +1,75 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React from 'react';
+import { StatusBar } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MessageCircle, Settings, Globe2 } from 'lucide-react-native';
+import { LocalIdProvider } from './contexts/LocalIdContext';
+import { PairingProvider } from './contexts/PairingContext';
+import { colors } from './constants/theme';
+import WelcomeScreen from './src/screens/WelcomeScreen';
+import PublicChatScreen from './src/screens/PublicChatScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
+import PairingScreen from './src/screens/PairingScreen';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
+function MainTabs() {
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
-  );
-}
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textDim,
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.background,
+          borderTopWidth: 1,
+          height: 56,
+        },
+        tabBarLabelStyle: { fontSize: 12, fontWeight: '500' },
+      }}>
+      <Tab.Screen
+        name="Chat"
+        component={PublicChatScreen}
+        options={{
+          title: 'Entourage',
+          tabBarIcon: ({ size, color }) => (
+            <Globe2 size={size} color={color} strokeWidth={2} />
+          ),
+        }}
       />
-    </View>
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <Settings size={size} color={color} strokeWidth={2} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-
-export default App;
+export default function App() {
+  return (
+    <LocalIdProvider>
+      <PairingProvider>
+        <StatusBar barStyle="light-content" backgroundColor={colors.background} />
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: colors.background },
+            }}>
+            <Stack.Screen name="Welcome" component={WelcomeScreen} />
+            <Stack.Screen name="Main" component={MainTabs} />
+            <Stack.Screen name="Pairing" component={PairingScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PairingProvider>
+    </LocalIdProvider>
+  );
+}
