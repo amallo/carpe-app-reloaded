@@ -16,22 +16,17 @@ import { ChevronLeft, TriangleAlert } from 'lucide-react-native';
 import { colors, typography, fontFamily, spacing, primaryGlow } from '../../constants/theme';
 import { useLocalId } from '../../contexts/LocalIdContext';
 
-const PSEUDO_LENGTH = 6;
-
 export default function OnboardingPseudoScreen() {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
-  const { localId, pseudo, setPseudo, isPseudoValid } = useLocalId();
+  const { localId, pseudo, setPseudo } = useLocalId();
   const scaleAnim = useRef(new Animated.Value(1)).current;
-
-  const canContinue = isPseudoValid(pseudo);
 
   const handleBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
 
   const handleCopyAndContinue = useCallback(() => {
-    if (!canContinue) return;
     Animated.sequence([
       Animated.timing(scaleAnim, {
         toValue: 0.96,
@@ -45,8 +40,8 @@ export default function OnboardingPseudoScreen() {
       }),
     ]).start();
     Clipboard.setString(localId);
-    navigation.reset({ index: 0, routes: [{ name: 'Main' }] });
-  }, [navigation, scaleAnim, localId, canContinue]);
+    navigation.reset({ index: 0, routes: [{ name: 'Main' as never }] });
+  }, [navigation, scaleAnim, localId]);
 
   return (
     <KeyboardAvoidingView
@@ -70,34 +65,19 @@ export default function OnboardingPseudoScreen() {
           <TriangleAlert size={18} color={colors.alert} strokeWidth={2} />
           <Text style={styles.warningText}>Seul votre identifiant est unique.</Text>
         </View>
-        <Text style={styles.pseudoLabel}>Pseudo (6 lettres)</Text>
+        <Text style={styles.pseudoLabel}>Pseudo (optionnel)</Text>
         <TextInput
           style={styles.pseudoInput}
-          placeholder="ABCDEF"
+          placeholder="Votre pseudo"
           placeholderTextColor={colors.textDim}
           value={pseudo}
           onChangeText={setPseudo}
-          maxLength={PSEUDO_LENGTH}
-          autoCapitalize="characters"
           autoCorrect={false}
         />
-        <TouchableOpacity
-          onPress={handleCopyAndContinue}
-          activeOpacity={1}
-          disabled={!canContinue}>
+        <TouchableOpacity onPress={handleCopyAndContinue} activeOpacity={1}>
           <Animated.View
-            style={[
-              styles.primaryButton,
-              primaryGlow,
-              { transform: [{ scale: scaleAnim }] },
-              !canContinue && styles.primaryButtonDisabled,
-            ]}>
-            <Text
-              style={[
-                styles.primaryButtonText,
-                !canContinue && styles.primaryButtonTextDisabled,
-              ]}>
-              Créer mon profil
+            style={[styles.primaryButton, primaryGlow, { transform: [{ scale: scaleAnim }] }]}>
+            <Text style={styles.primaryButtonText}>Créer mon profil
             </Text>
           </Animated.View>
         </TouchableOpacity>
@@ -187,11 +167,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: colors.background,
-  },
-  primaryButtonDisabled: {
-    opacity: 0.5,
-  },
-  primaryButtonTextDisabled: {
-    color: colors.textDim,
   },
 });

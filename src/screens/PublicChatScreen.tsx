@@ -8,21 +8,17 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
-  Animated,
-  Vibration,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Mic, Bluetooth, Send } from 'lucide-react-native';
-import { colors, typography, fontFamily, spacing, primaryGlow } from '../../constants/theme';
+import { Bluetooth, Send } from 'lucide-react-native';
+import { colors, typography, fontFamily, spacing } from '../../constants/theme';
 import {
   publicChatMessages,
   type PublicMessage,
   type Presence,
 } from '../../data/publicChatData';
 import { usePairing } from '../../contexts/PairingContext';
-import { useLocalId } from '../../contexts/LocalIdContext';
 
 const presenceLabel: Record<Presence, string> = {
   proche: 'Proche',
@@ -73,11 +69,9 @@ export default function PublicChatScreen() {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const { isPaired, pairedDeviceName } = usePairing();
-  const { pseudo } = useLocalId();
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<PublicMessage[]>(() => [...publicChatMessages]);
   const scrollRef = useRef<ScrollView>(null);
-  const scaleAnim = useRef(new Animated.Value(1)).current;
 
   const handleSend = () => {
     const text = input.trim();
@@ -85,7 +79,7 @@ export default function PublicChatScreen() {
     const newMsg: PublicMessage = {
       id: `m-${Date.now()}`,
       senderId: 'user-1',
-      senderName: pseudo.trim() || 'You',
+      senderName: 'You',
       text,
       timestamp: formatTime(new Date()),
       isOwn: true,
@@ -95,23 +89,6 @@ export default function PublicChatScreen() {
     setMessages((prev) => [...prev, newMsg]);
     setInput('');
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
-  };
-
-  const handlePTTPressIn = () => {
-    Vibration.vibrate(50);
-    Animated.timing(scaleAnim, {
-      toValue: 0.92,
-      duration: 80,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handlePTTPressOut = () => {
-    Animated.timing(scaleAnim, {
-      toValue: 1,
-      duration: 120,
-      useNativeDriver: true,
-    }).start();
   };
 
   return (
@@ -174,16 +151,6 @@ export default function PublicChatScreen() {
           disabled={!input.trim()}>
           <Send size={22} color={input.trim() ? colors.background : colors.textDim} strokeWidth={2} />
         </TouchableOpacity>
-        <Pressable onPressIn={handlePTTPressIn} onPressOut={handlePTTPressOut}>
-          <Animated.View
-            style={[
-              styles.pttButton,
-              primaryGlow,
-              { transform: [{ scale: scaleAnim }] },
-            ]}>
-            <Mic size={24} color={colors.background} strokeWidth={2} />
-          </Animated.View>
-        </Pressable>
       </View>
     </KeyboardAvoidingView>
   );
@@ -331,18 +298,5 @@ const styles = StyleSheet.create({
   },
   sendButtonActive: {
     backgroundColor: colors.primary,
-  },
-  pttButton: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.35,
-    shadowRadius: 12,
-    elevation: 4,
   },
 });
