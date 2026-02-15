@@ -124,11 +124,7 @@ export default function PublicChatScreen() {
         ))}
       </ScrollView>
 
-      <View
-        style={[
-          styles.inputRow,
-          { paddingBottom: (insets.bottom || spacing.padding) + spacing.padding },
-        ]}>
+      <View style={[styles.inputRow, { paddingBottom: spacing.padding }]}>
         <TextInput
           style={styles.input}
           placeholder="Message…"

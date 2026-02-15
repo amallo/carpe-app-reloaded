@@ -3,6 +3,7 @@ import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MessageCircle, Settings, Globe2 } from 'lucide-react-native';
 import { LocalIdProvider } from './contexts/LocalIdContext';
 import { PairingProvider } from './contexts/PairingContext';
@@ -15,7 +16,10 @@ import PairingScreen from './src/screens/PairingScreen';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+const TAB_BAR_HEIGHT = 56;
+
 function MainTabs() {
+  const insets = useSafeAreaInsets();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -26,7 +30,8 @@ function MainTabs() {
           backgroundColor: colors.surface,
           borderTopColor: colors.background,
           borderTopWidth: 1,
-          height: 56,
+          height: TAB_BAR_HEIGHT + insets.bottom,
+          paddingBottom: insets.bottom,
         },
         tabBarLabelStyle: { fontSize: 12, fontWeight: '500' },
       }}>
@@ -55,21 +60,23 @@ function MainTabs() {
 
 export default function App() {
   return (
-    <LocalIdProvider>
-      <PairingProvider>
-        <StatusBar barStyle="light-content" backgroundColor={colors.background} />
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-              contentStyle: { backgroundColor: colors.background },
-            }}>
-            <Stack.Screen name="Welcome" component={WelcomeScreen} />
-            <Stack.Screen name="Main" component={MainTabs} />
-            <Stack.Screen name="Pairing" component={PairingScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PairingProvider>
-    </LocalIdProvider>
+    <SafeAreaProvider>
+      <LocalIdProvider>
+        <PairingProvider>
+          <StatusBar barStyle="light-content" backgroundColor={colors.background} />
+          <NavigationContainer>
+            <Stack.Navigator
+              screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: colors.background },
+              }}>
+              <Stack.Screen name="Welcome" component={WelcomeScreen} />
+              <Stack.Screen name="Main" component={MainTabs} />
+              <Stack.Screen name="Pairing" component={PairingScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </PairingProvider>
+      </LocalIdProvider>
+    </SafeAreaProvider>
   );
 }
