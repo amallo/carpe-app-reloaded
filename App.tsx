@@ -7,7 +7,7 @@ import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-cont
 import { MessageCircle, Settings, Globe2 } from 'lucide-react-native';
 import { LocalIdProvider } from './contexts/LocalIdContext';
 import { PairingProvider } from './contexts/PairingContext';
-import { colors } from './constants/theme';
+import { colors, fontFamily } from './constants/theme';
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import PublicChatScreen from './src/screens/PublicChatScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
@@ -33,7 +33,11 @@ function MainTabs() {
           height: TAB_BAR_HEIGHT + insets.bottom,
           paddingBottom: insets.bottom,
         },
-        tabBarLabelStyle: { fontSize: 12, fontWeight: '500' },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '500',
+          fontFamily: fontFamily.medium,
+        },
       }}>
       <Tab.Screen
         name="Chat"

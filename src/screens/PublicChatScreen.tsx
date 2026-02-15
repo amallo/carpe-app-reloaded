@@ -15,7 +15,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Mic, Bluetooth } from 'lucide-react-native';
-import { colors, typography, spacing, primaryGlow } from '../../constants/theme';
+import { colors, typography, fontFamily, spacing, primaryGlow } from '../../constants/theme';
 import {
   publicChatMessages,
   type PublicMessage,
@@ -227,12 +227,14 @@ const styles = StyleSheet.create({
   },
   bubbleAuthor: {
     fontSize: 13,
+    fontFamily: fontFamily.medium,
     fontWeight: '500',
     color: '#B8A898',
     marginBottom: 2,
   },
   bubbleText: {
     fontSize: 16,
+    fontFamily: fontFamily.regular,
     fontWeight: '400',
     color: colors.text,
     lineHeight: 22,
@@ -246,8 +248,16 @@ const styles = StyleSheet.create({
   },
   bubblePresence: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   bubblePresenceDot: { width: 5, height: 5, borderRadius: 2.5 },
-  bubblePresenceLabel: { fontSize: 11, color: colors.textDim },
-  bubbleTime: { fontSize: 11, color: colors.textDim },
+  bubblePresenceLabel: {
+    fontSize: 11,
+    fontFamily: fontFamily.regular,
+    color: colors.textDim,
+  },
+  bubbleTime: {
+    fontSize: 11,
+    fontFamily: fontFamily.regular,
+    color: colors.textDim,
+  },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
