@@ -1,97 +1,92 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 🐟 Carpe
 
-# Getting Started
+Carpe is an experiment in building a **decentralized messaging system** using LoRa and BLE.  
+It’s not about selling, scaling or shipping fast.  
+It’s about **exploration, autonomy, and curiosity**.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## Key Features
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- **Instant access** — no account, no signup. Just connect to a **LoRa emitter/receiver module** and pick a nickname.  
+- **Community chat** — drop a message on a public neighborhood channel and reach everyone around you.  
+- **Private & secure** — send end-to-end encrypted messages directly to your friends.  
+---
 
-To start the Metro dev server, run the following command from the root of your React Native project:
 
-```sh
-# Using npm
-npm start
+## Hey, stop — what is LoRa?  
 
-# OR using Yarn
-yarn start
-```
+LoRa (short for *Long Range*) is a radio protocol designed to transmit **small amounts of digital data** over long distances using very little power.  
 
-## Step 2: Build and run your app
+- It doesn’t need cell towers or Wi-Fi — just simple modules that talk directly to each other.  
+- It’s optimized for resilience: low bandwidth, but strong range (several kilometers depending on the environment).  
+- Perfect for building **peer-to-peer communication networks** without relying on centralized infrastructure.  
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+👉 Want to dive deeper? Check out [LoRa explained](https://www.thethingsnetwork.org/docs/lorawan/what-is-lorawan/).  
 
-### Android
+📡 **Carpe currently uses LoRa in peer-to-peer mode** — modules communicate directly without gateways or servers.  
 
-```sh
-# Using npm
-npm run android
+---
 
-# OR using Yarn
-yarn android
-```
+## 💡 Motivation
 
-### iOS
+Why not just use a walkie-talkie?  
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+The most decentralized communication device already exists: the walkie-talkie. It's simple, reliable, and often the best solution.  
+I have two excellent walkies, and I rarely carry them with me — only when I know I'll really need them, which is almost never 😄  
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+But what device do we actually carry everywhere, on every trip?  
+Our phone.  
 
-```sh
-bundle install
-```
+And that’s where the idea came:  
+*What if we had a small, discreet module that could turn our phone into a transmitter/receiver, extending its reach without relying on the Internet or central servers?*  
 
-Then, and every time you update your native dependencies, run:
+Carpe is the experiment born from this question — a way to explore peer-to-peer, off-grid communication, while staying practical and portable.
 
-```sh
-bundle exec pod install
-```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+---
 
-```sh
-# Using npm
-npm run ios
 
-# OR using Yarn
-yarn ios
-```
+## Why "Carpe"?  
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+The name comes from *Carpe diem* — “seize the day.”  
+Here, it means **seizing autonomy** in the way we communicate.  
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+Carpe is not a finished product but an exploration:  
+- A way to reclaim resilience in communication  
+- An invitation to wander off the beaten path  
+- A notebook in motion, where experiments come to life  
 
-## Step 3: Modify your app
+---
 
-Now that you have successfully run the app, let's make changes!
+## 📚 Documentation
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+- **[Technical Whitepaper](CARPEAPP_WHITEPAPER.md)** — Architecture technique, contraintes LoRa, protocoles et principes de conception
+- **LoRa Module** — Firmware en développement dans [`amallo/carpe-module`](https://github.com/amallo/carpe-module)
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## 🛠️ Current Status
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+Work in progress — and fun! 🎉  
+A minimal firmware is under development in [`amallo/carpe-module`](https://github.com/amallo/carpe-module).
 
-## Congratulations! :tada:
+---
 
-You've successfully run and modified your React Native App. :partying_face:
+## 🤔 Why?
 
-### Now what?
+Because the world needs **resilient, censorship-resistant, off-grid communication tools**.  
+Because tinkering in the unknown feels alive.  
+Because autonomy matters. 
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+---
 
-# Troubleshooting
+## ✨ Motto
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+> “Exploration first. Outcome later.”
 
-# Learn More
+---
 
-To learn more about React Native, take a look at the following resources:
+## 📱 Screenshots
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+![Carpe App Screenshot](chat.png)
+![Carpe App - LoRa Emitters](IMG_8B3A372072DC-1.jpeg)
+
